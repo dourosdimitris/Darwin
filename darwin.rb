@@ -20,7 +20,6 @@ class GeneticAlgo
 		@probabilitySum = 0
 		@selectedPopulation = []
 		@generation = []
-		@target = "111111" # target in binary or ftotal?
 
 		@population = loadData(ARGV[0])
 
@@ -31,6 +30,8 @@ class GeneticAlgo
 
 		puts "Chromosome Length:"
 		puts "\t#{@chromosomeLength}"
+
+		@meanFTotal = 0
 
 	end
 
@@ -61,13 +62,18 @@ class GeneticAlgo
 		puts "Selected Population:"
 		puts "\t#{@selectedPopulation}"
 
-# => GENERATION WORKS. TODO LOOP UNTIL REACHES TARGET.
+# => GENERATION WORKS. TODO LOOP UNTIL NO Improvement.
 
-		until (@fTotal)
+		until (@fTotal  )
 		  	@generation = crossover(@selectedPopulation, CROSSOVERPOINT, @chromosomeLength)
+		  	@populationFitness = calculateFitness(@generation)
+		  	@fTotal = calculateTotalFitness(@generation)
+		  	@populationSelectionProbability = calculatePopulationSelectionProbability(@populationFitness, @fTotal)
+		  	@roulette = createRoulette(@populationSelectionProbability)
+		  	@selectedPopulation = selection(@generation)
 
-			puts ""
-			puts @generation
+		  	puts @fTotal
+			puts "\t#{@generation}"
 		end
 		
 	end
