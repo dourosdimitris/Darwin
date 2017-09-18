@@ -11,10 +11,10 @@ CROSSOVERPOINT = CROSSOVEROPTIONS[0]
 class GeneticAlgo
 
 	def initialize 
-		@initialPopulation = []
+		@population = []
 		@chromosomeLength = 0
-		@initialPopulationFitness = []
-		@initialPopulationSelectionProbability = []
+		@populationFitness = []
+		@populationSelectionProbability = []
 		@fTotal = 0
 		@roulette = []
 		@probabilitySum = 0
@@ -22,12 +22,12 @@ class GeneticAlgo
 		@generation = []
 		@target = "111111" # target in binary or ftotal?
 
-		@initialPopulation = loadData(ARGV[0])
+		@population = loadData(ARGV[0])
 
 		puts "Initial Population:"
-		puts "\t#{@initialPopulation}"
+		puts "\t#{@population}"
 
-		@chromosomeLength = @initialPopulation[0].length
+		@chromosomeLength = @population[0].length
 
 		puts "Chromosome Length:"
 		puts "\t#{@chromosomeLength}"
@@ -36,27 +36,27 @@ class GeneticAlgo
 
 	def run
 
-		@initialPopulationFitness = calculateFitness(@initialPopulation)
+		@populationFitness = calculateFitness(@population)
 
 		puts "Initial Population Fitness:"
-		puts "\t#{@initialPopulationFitness}"
+		puts "\t#{@populationFitness}"
 
-		@fTotal = calculateTotalFitness(@initialPopulation)
+		@fTotal = calculateTotalFitness(@population)
 
 		puts "Total Fitness:" 
 		puts "\t#{@fTotal}" 
 
-		@initialPopulationSelectionProbability = calculatePopulationSelectionProbability(@initialPopulationFitness, @fTotal)
+		@populationSelectionProbability = calculatePopulationSelectionProbability(@populationFitness, @fTotal)
 		
 		puts "Initial Population Selection Probability:"
-		puts "\t#{@initialPopulationSelectionProbability}"
+		puts "\t#{@populationSelectionProbability}"
 
-		@roulette = createRoulette(@initialPopulationSelectionProbability)
+		@roulette = createRoulette(@populationSelectionProbability)
 
 		puts "Roulette:"
 		puts "\t#{@roulette}"
 
-		@selectedPopulation = selection(@initialPopulation)
+		@selectedPopulation = selection(@population)
 
 		puts "Selected Population:"
 		puts "\t#{@selectedPopulation}"
@@ -65,7 +65,7 @@ class GeneticAlgo
 
 		until (@fTotal)
 		  	@generation = crossover(@selectedPopulation, CROSSOVERPOINT, @chromosomeLength)
-		  	
+
 			puts ""
 			puts @generation
 		end
