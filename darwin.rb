@@ -62,13 +62,14 @@ class GeneticAlgo
 		puts "\t#{@selectedPopulation}"
 
 # => GENERATION WORKS. TODO LOOP UNTIL REACHES TARGET.
-#		while .to_i(2) $i < $num  do
-#		   puts("Inside the loop i = #$i" )
-#		   $i +=1
-#		end
-		@generation = crossover(@selectedPopulation, CROSSOVERPOINT, @chromosomeLength)
-		puts ""
-		puts @generation
+
+		until (@fTotal)
+		  	@generation = crossover(@selectedPopulation, CROSSOVERPOINT, @chromosomeLength)
+		  	
+			puts ""
+			puts @generation
+		end
+		
 	end
 
 end
