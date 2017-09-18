@@ -1,76 +1,87 @@
+require './inputdata'
+require './fitness'
+require './roulette'
+require './selection'
+require './crossover'
+
+ROUNDINGDIGITS = 3 
+CROSSOVEROPTIONS = [0, 1, 2]
+CROSSOVERPOINT = CROSSOVEROPTIONS[0]
+
 class GeneticAlgo
 
 	def initialize 
 		@initialPopulation = []
+		@chromosomeLength = 0
 		@initialPopulationFitness = []
 		@initialPopulationSelectionProbability = []
 		@fTotal = 0
 		@roulette = []
 		@probabilitySum = 0
 		@selectedPopulation = []
+		@generation = []
+		@target = "111111" # target in binary or ftotal?
 
-		File.open("input.txt", "r") do |f|
-		  f.each_line do |line|
-		    @initialPopulation << line
-		    #puts line
-		  end
-		end
+		@initialPopulation = loadData(ARGV[0])
 
 		puts "Initial Population:"
-		puts @initialPopulation
+		puts "\t#{@initialPopulation}"
+
+		@chromosomeLength = @initialPopulation[0].length
+
+		puts "Chromosome Length:"
+		puts "\t#{@chromosomeLength}"
 
 	end
 
 	def run
-		@initialPopulation.each do |chromosome|
-			#puts chromosome
-			@initialPopulationFitness << chromosome.to_i(2)
-			#Calculate population fitness
-			@fTotal += chromosome.to_i(2)
-		end
+
+		@initialPopulationFitness = calculateFitness(@initialPopulation)
 
 		puts "Initial Population Fitness:"
-		puts @initialPopulationFitness
+		puts "\t#{@initialPopulationFitness}"
+
+		@fTotal = calculateTotalFitness(@initialPopulation)
 
 		puts "Total Fitness:" 
-		puts @fTotal 
+		puts "\t#{@fTotal}" 
 
-		@initialPopulationFitness.each do |chromosomeFitness|
-			@initialPopulationSelectionProbability << (Float(chromosomeFitness) / Float(@fTotal)).round(5)
-		end
+		@initialPopulationSelectionProbability = calculatePopulationSelectionProbability(@initialPopulationFitness, @fTotal)
 		
 		puts "Initial Population Selection Probability:"
-		puts @initialPopulationSelectionProbability
+		puts "\t#{@initialPopulationSelectionProbability}"
 
-		@initialPopulationSelectionProbability.each do |probability|
-			@probabilitySum = (@probabilitySum + probability)
-			@roulette << @probabilitySum
-		end
+		@roulette = createRoulette(@initialPopulationSelectionProbability)
 
 		puts "Roulette:"
-		puts @roulette
+		puts "\t#{@roulette}"
 
-		puts ""
-
-		# Todo select atoms for reproduction
-		
-		@initialPopulation.count.times do |n|
-			chromosome = 0
-			rnd = rand.round(5); puts rnd
-			if rnd > @roulette[n] then
-				chromosome += 1
-				puts chromosome
-			else
-				@selectedPopulation << @initialPopulation[chromosome]
-			end
-			
-		end
+		@selectedPopulation = selection(@initialPopulation)
 
 		puts "Selected Population:"
-		puts @selectedPopulation
+		puts "\t#{@selectedPopulation}"
+
+# => GENERATION WORKS. TODO LOOP UNTIL REACHES TARGET.
+#		while .to_i(2) $i < $num  do
+#		   puts("Inside the loop i = #$i" )
+#		   $i +=1
+#		end
+		@generation = crossover(@selectedPopulation, CROSSOVERPOINT, @chromosomeLength)
+		puts ""
+		puts @generation
 	end
 
 end
 
-g = GeneticAlgo.new
-g.run
+if ARGV.length == 0 then
+	puts "HELP"
+	puts "Usage: ruby darwin.rb [input file]"
+	puts "Example: 'ruby darwin.rb input.txt'"
+else
+	puts "Darwin"
+	puts "A simple genetic algorithm with roulette selection."
+	puts "Copyright 2017 - Dimitrios Douros"
+	puts ""
+	g = GeneticAlgo.new
+	g.run
+end
