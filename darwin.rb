@@ -12,6 +12,9 @@ CROSSOVERPOINT = CROSSOVEROPTIONS[0]
 class GeneticAlgo
 
 	def initialize 
+
+		print "Initializing Darwin... "
+
 		@population = []
 		@chromosomeLength = 0
 		@populationFitness = []
@@ -45,6 +48,8 @@ class GeneticAlgo
 
 		log("Initial Population:", @population) 
 		log("Chromosome Length:", @chromosomeLength) 
+
+		puts "Done!"
 
 	end
 
@@ -103,7 +108,10 @@ if ARGV.length < 1 then
 	puts "HELP"
 	puts "Usage: ruby darwin.rb [input file] [Epochs to run] [Visualization]"
 	puts "Example: 'ruby darwin.rb input.txt 1000 -v'"
+	puts "WARNING: Gnuplot must be installed and added to system PATH."
+	puts "You can disable it by removing '-v' flag."
 else
+	puts ""
 	puts "Darwin"
 	puts "A simple genetic algorithm with roulette selection."
 	puts "Copyright 2017 - Dimitrios Douros"

@@ -42,6 +42,7 @@ end
 
 def clearLog
 	open($txt_filename, 'w') do |log|
-		log.puts ''
+		log.print Time.now
+		log.puts ""
 	end
 end
