@@ -101,7 +101,7 @@ class GeneticAlgo
 
 		puts "Done!"
 
-		showResults(@fTotalSequence)
+		showResults(@fTotalSequence, @visualization)
 
 	end
 

@@ -3,16 +3,16 @@ require 'gnuplot'
 
 $txt_filename = "results.txt"
 
-def showResults(sequence)
+def showResults(sequence, visualization)
 
 	print "Opening Results file... "
 	system %{cmd /c "start #{$txt_filename}"}
 	puts "Done!"
 
-	if @visualization == true then 
-		print "Plotting Results. "
-		puts "Plot may take some seconds to open..."
-		Thread.new {
+	if visualization == true then 
+		print "Plotting Results... "
+		puts "(Plot may take some seconds to open)"
+
 			Gnuplot.open do |gp|
 			  Gnuplot::Plot.new( gp ) do |plot|
 			  
@@ -23,14 +23,24 @@ def showResults(sequence)
 			    x = (0..sequence.length).collect { |v| v.to_i }
 			    y = sequence.collect { |v| v.to_i }
 
-			    plot.data << Gnuplot::DataSet.new( [x, y] ) do |ds|
-			      ds.with = "linespoints"
-			      ds.notitle
-			    end
+			    plot.data = [
+			      Gnuplot::DataSet.new( [x, y] ) { |ds|
+			        ds.with = "linespoints"
+			        ds.title = "Actual Fitness"
+			    	  ds.linewidth = 4
+			      },
+			    
+			      Gnuplot::DataSet.new( [x, y] ) { |ds|
+			        ds.with = "lines"
+			        ds.title = "Smoothed Fitness"
+			        ds.smooth = "csplines"
+			      }
+			    ]
+
 			  end
 			end
+
 			puts "Done!"
-		}
 	end
 
 end
