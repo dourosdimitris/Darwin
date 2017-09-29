@@ -29,15 +29,22 @@ class GeneticAlgo
 
 		@epochs = ARGV[1].to_i
 
-		#puts "Initial Population:"
-		#puts "\t#{@population}"
+		@visualization = false
+
+		if ARGV[2] == '-v' then 
+			@visualization = true
+		else
+			@visualization = false
+		end
 
 		@chromosomeLength = @population[0].length
 
-		puts "Chromosome Length:"
-		puts "\t#{@chromosomeLength}"
-
 		@meanFTotal = 0
+
+		clearLog
+
+		log("Initial Population:", @population) 
+		log("Chromosome Length:", @chromosomeLength) 
 
 	end
 
@@ -45,28 +52,24 @@ class GeneticAlgo
 
 		@populationFitness = calculateFitness(@population)
 
-		#puts "Initial Population Fitness:"
-		#puts "\t#{@populationFitness}"
+		log("Initial Population Fitness:", @populationFitness)
 
 		@fTotal = calculateTotalFitness(@population)
 
-		puts "Total Fitness:" 
-		puts "\t#{@fTotal}" 
+		log("Total Fitness:", @fTotal)
 
 		@populationSelectionProbability = calculatePopulationSelectionProbability(@populationFitness, @fTotal)
 		
-		#puts "Initial Population Selection Probability:"
-		#puts "\t#{@populationSelectionProbability}"
+		log("Initial Population Selection Probability:", @populationSelectionProbability)
 
 		@roulette = createRoulette(@populationSelectionProbability)
 
-		#puts "Roulette:"
-		#puts "\t#{@roulette}"
+		log("Roulette:", @roulette)
 
 		@selectedPopulation = selection(@population)
 
-		#puts "Selected Population:"
-		#puts "\t#{@selectedPopulation}"
+		log("Selected Population:", @selectedPopulation)
+
 
 		# LOOP UNTIL FOR No OF EPOCHS
 		for i in 1..@epochs do 
@@ -77,22 +80,29 @@ class GeneticAlgo
 		  	@roulette = createRoulette(@populationSelectionProbability)
 		  	@selectedPopulation = selection(@generation)
 
-		  	puts @fTotal
+		  	log("", "")
+
+		  	log("EPOCH #{i}:", "-----")
+
+		  	log("Population Fitness:", @fTotal)
+
+		  	log("Generation:", @generation)
+
 		  	@fTotalSequence << @fTotal
-			#puts "\t#{@generation}"
+
 		end
 
 		#p @fTotalSequence
 
-		saveResults(@fTotalSequence, @fTotal, @generation)
+		plotResults(@fTotalSequence)
 	end
 
 end
 
 if ARGV.length < 1 then
 	puts "HELP"
-	puts "Usage: ruby darwin.rb [input file]"
-	puts "Example: 'ruby darwin.rb input.txt 1000'"
+	puts "Usage: ruby darwin.rb [input file] [Epochs to run] [Visualization]"
+	puts "Example: 'ruby darwin.rb input.txt 1000 -v'"
 else
 	puts "Darwin"
 	puts "A simple genetic algorithm with roulette selection."

@@ -1,38 +1,47 @@
 require 'open-uri'
 require 'gnuplot'
 
-def saveResults(sequence, ftotal, lastGeneration)
-	txt_filename = 'results.txt'
-	png_filename = 'population_fitness.png'
+$txt_filename = "results.txt"
 
-	print "Generating Results... "
+def plotResults(sequence)
 
-	open(txt_filename, 'w') do |txtfile|
-	  txtfile.puts ftotal, lastGeneration
-	end
+	print "Plotting Results... "
 
-	system %{cmd /c "start #{txt_filename}"}
+	system %{cmd /c "start #{$txt_filename}"}
 
-	Gnuplot.open do |gp|
-	  Gnuplot::Plot.new( gp ) do |plot|
-	  
-	    plot.title  "Population Fitness"
-	    plot.xlabel "Epoch"
-	    plot.ylabel "Fitness"
-	    
-	    x = (0..sequence.length).collect { |v| v.to_i }
-	    y = sequence.collect { |v| v.to_i }
+	if @visualization == true then 
+		Gnuplot.open do |gp|
+		  Gnuplot::Plot.new( gp ) do |plot|
+		  
+		    plot.title  "Population Fitness"
+		    plot.xlabel "Epoch"
+		    plot.ylabel "Fitness"
+		    
+		    x = (0..sequence.length).collect { |v| v.to_i }
+		    y = sequence.collect { |v| v.to_i }
 
-	    plot.data << Gnuplot::DataSet.new( [x, y] ) do |ds|
-	      ds.with = "linespoints"
-	      ds.notitle
-	    end
-	  end
+		    plot.data << Gnuplot::DataSet.new( [x, y] ) do |ds|
+		      ds.with = "linespoints"
+		      ds.notitle
+		    end
+		  end
+		end
 	end
 
 	puts "Done!"
 
 end
 
+def log(title, message)
 
+	open($txt_filename, 'a') do |log|
+		log.puts title
+		log.puts "\t#{message}"
+	end
+end
 
+def clearLog
+	open($txt_filename, 'w') do |log|
+		log.puts ''
+	end
+end
