@@ -4,7 +4,7 @@ def createRoulette(populationSelectionProbability)
 	roulette = []
 
 	populationSelectionProbability.each do |probability|
-		probabilitySum = (probabilitySum + probability)
+		probabilitySum = (probabilitySum + probability)#.round(5)
 		roulette << probabilitySum
 	end
 

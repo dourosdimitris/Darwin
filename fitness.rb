@@ -27,7 +27,7 @@ def calculatePopulationSelectionProbability(populationFitness, fTotal)
 	populationSelectionProbability = []
 
 	populationFitness.each do |chromosomeFitness|
-		populationSelectionProbability << (Float(chromosomeFitness) / Float(fTotal)).round(ROUNDINGDIGITS)
+		populationSelectionProbability << (Float(chromosomeFitness) / Float(fTotal))#.round(ROUNDINGDIGITS) potential error due to roulette sum not adding exactly to 1.
 	end
 
 	return populationSelectionProbability
