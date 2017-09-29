@@ -3,32 +3,35 @@ require 'gnuplot'
 
 $txt_filename = "results.txt"
 
-def plotResults(sequence)
+def showResults(sequence)
 
-	print "Plotting Results... "
-
+	print "Opening Results file... "
 	system %{cmd /c "start #{$txt_filename}"}
+	puts "Done!"
 
 	if @visualization == true then 
-		Gnuplot.open do |gp|
-		  Gnuplot::Plot.new( gp ) do |plot|
-		  
-		    plot.title  "Population Fitness"
-		    plot.xlabel "Epoch"
-		    plot.ylabel "Fitness"
-		    
-		    x = (0..sequence.length).collect { |v| v.to_i }
-		    y = sequence.collect { |v| v.to_i }
+		print "Plotting Results. "
+		puts "Plot may take some seconds to open..."
+		Thread.new {
+			Gnuplot.open do |gp|
+			  Gnuplot::Plot.new( gp ) do |plot|
+			  
+			    plot.title  "Population Fitness"
+			    plot.xlabel "Epoch"
+			    plot.ylabel "Fitness"
+			    
+			    x = (0..sequence.length).collect { |v| v.to_i }
+			    y = sequence.collect { |v| v.to_i }
 
-		    plot.data << Gnuplot::DataSet.new( [x, y] ) do |ds|
-		      ds.with = "linespoints"
-		      ds.notitle
-		    end
-		  end
-		end
+			    plot.data << Gnuplot::DataSet.new( [x, y] ) do |ds|
+			      ds.with = "linespoints"
+			      ds.notitle
+			    end
+			  end
+			end
+			puts "Done!"
+		}
 	end
-
-	puts "Done!"
 
 end
 
@@ -42,7 +45,7 @@ end
 
 def clearLog
 	open($txt_filename, 'w') do |log|
-		log.print Time.now
+		log.puts Time.now
 		log.puts ""
 	end
 end

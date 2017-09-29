@@ -51,6 +51,8 @@ class GeneticAlgo
 
 		puts "Done!"
 
+		print "Working... "
+
 	end
 
 	def run
@@ -97,9 +99,10 @@ class GeneticAlgo
 
 		end
 
-		#p @fTotalSequence
+		puts "Done!"
 
-		plotResults(@fTotalSequence)
+		showResults(@fTotalSequence)
+
 	end
 
 end
@@ -116,6 +119,9 @@ else
 	puts "A simple genetic algorithm with roulette selection."
 	puts "Copyright 2017 - Dimitrios Douros"
 	puts ""
+
 	g = GeneticAlgo.new
+
 	g.run
+
 end
