@@ -17,7 +17,7 @@ def showResults(sequence, plotting)
 			  
 			  	plot.xrange "[1:#{sequence.length}]"
 			    plot.title  "Population Fitness"
-			    plot.xlabel "Epoch"
+			    plot.xlabel "Generation"
 			    plot.ylabel "Fitness"
 			    
 			    x = (1..sequence.length).collect { |v| v.to_i }

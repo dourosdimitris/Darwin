@@ -1,10 +1,10 @@
-require './inputdata'
-require './fitness'
-require './roulette'
-require './selection'
-require './crossover'
-require './save-results'
-require './progress'
+require './lib/inputdata'
+require './lib/fitness'
+require './lib/roulette'
+require './lib/selection'
+require './lib/crossover'
+require './lib/save-results'
+require './lib/progress'
 
 JUSTIFICATIONROWS = 40
 ROUNDINGDIGITS = 6 
@@ -27,12 +27,12 @@ class GeneticAlgo
 
 		@roulette = []
 		@probabilitySum = 0
-		@selectedPopulation = []
+		@selectedChromosomes = []
 		@generation = []
 
 		@population = loadData(ARGV[0])
 
-		@epochs = ARGV[1].to_i
+		@noOfGenerations = ARGV[1].to_i
 
 		@plotting = false
 
@@ -73,27 +73,29 @@ class GeneticAlgo
 
 		log("Roulette:", @roulette)
 
-		@selectedPopulation = selection(@population)
+		@selectedChromosomes = selection(@population)
 
-		log("Selected Population:", @selectedPopulation)
+		log("Selected:", @selectedChromosomes)
 
 
-		# LOOP UNTIL FOR No OF EPOCHS
-		for i in 1..@epochs do 
-			@generation = crossover(@selectedPopulation, CROSSOVERPOINT, @chromosomeLength)
+		# LOOP UNTIL FOR No OF GENERATIONS
+		for i in 1..@noOfGenerations do 
+			@generation = crossover(@selectedChromosomes, CROSSOVERPOINT, @chromosomeLength)
 		  	@populationFitness = calculateFitness(@generation)
 		  	@fTotal = calculateTotalFitness(@generation)
 		  	@populationSelectionProbability = calculatePopulationSelectionProbability(@populationFitness, @fTotal)
 		  	@roulette = createRoulette(@populationSelectionProbability)
-		  	@selectedPopulation = selection(@generation)
+		  	@selectedChromosomes = selection(@generation)
 
 		  	log("", "")
 
-		  	log("EPOCH #{i}:", "-----")
+		  	log("GENERATION #{i}:", "-----")
 
 		  	log("Population Fitness:", @fTotal)
 
 		  	log("Generation:", @generation)
+
+		  	log("Selected:", @selectedChromosomes)
 
 		  	@fTotalSequence << @fTotal
 
@@ -119,7 +121,7 @@ if ARGV.length <= 1 then
 	puts ""
 	puts "HELP:"
 	puts ""
-	puts "Usage: ruby darwin.rb [input file] [Epochs to run] [Visualization]"
+	puts "Usage: ruby darwin.rb [input file] [Generations to run] [Plot]"
 	puts ""
 	puts "Example: 'ruby darwin.rb input.txt 1000 -p'"
 	puts ""
