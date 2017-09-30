@@ -4,7 +4,9 @@ require './roulette'
 require './selection'
 require './crossover'
 require './save-results'
+require './progress'
 
+JUSTIFICATIONROWS = 40
 ROUNDINGDIGITS = 6 
 CROSSOVEROPTIONS = [0, 1, 2]
 CROSSOVERPOINT = CROSSOVEROPTIONS[0]
@@ -13,7 +15,7 @@ class GeneticAlgo
 
 	def initialize 
 
-		print "Initializing Darwin... "
+		print "Initializing Darwin...".ljust(JUSTIFICATIONROWS)
 
 		@population = []
 		@chromosomeLength = 0
@@ -50,8 +52,6 @@ class GeneticAlgo
 		log("Chromosome Length:", @chromosomeLength) 
 
 		puts "Done!"
-
-		print "Working... "
 
 	end
 
@@ -97,6 +97,8 @@ class GeneticAlgo
 
 		  	@fTotalSequence << @fTotal
 
+			updateProgress(i, ARGV[1].to_i)
+
 		end
 
 		puts "Done!"
@@ -115,13 +117,15 @@ if ARGV.length < 1 then
 	puts "You can disable it by removing '-v' flag."
 else
 	puts ""
-	puts "Darwin"
+	puts "---------------------------------------------------"
+	puts "DARWIN"
 	puts "A simple genetic algorithm with roulette selection."
-	puts "Copyright 2017 - Dimitrios Douros"
+	puts "Copyright 2017, Dimitrios Douros"
+	puts "---------------------------------------------------"
 	puts ""
 
 	g = GeneticAlgo.new
-
+	
 	g.run
 
 end
