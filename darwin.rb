@@ -34,12 +34,12 @@ class GeneticAlgo
 
 		@epochs = ARGV[1].to_i
 
-		@visualization = false
+		@plotting = false
 
-		if ARGV[2] == '-v' then 
-			@visualization = true
+		if ARGV[2] == '-p' then 
+			@plotting = true
 		else
-			@visualization = false
+			@plotting = false
 		end
 
 		@chromosomeLength = @population[0].length
@@ -103,18 +103,28 @@ class GeneticAlgo
 
 		puts "Done!"
 
-		showResults(@fTotalSequence, @visualization)
+		showResults(@fTotalSequence, @plotting)
 
 	end
 
 end
 
-if ARGV.length < 1 then
-	puts "HELP"
+if ARGV.length <= 1 then
+	puts ""
+	puts "---------------------------------------------------"
+	puts "DARWIN"
+	puts "A simple genetic algorithm with roulette selection."
+	puts "Copyright 2017, Dimitrios Douros"
+	puts "---------------------------------------------------"
+	puts ""
+	puts "HELP:"
+	puts ""
 	puts "Usage: ruby darwin.rb [input file] [Epochs to run] [Visualization]"
-	puts "Example: 'ruby darwin.rb input.txt 1000 -v'"
-	puts "WARNING: Gnuplot must be installed and added to system PATH."
-	puts "You can disable it by removing '-v' flag."
+	puts ""
+	puts "Example: 'ruby darwin.rb input.txt 1000 -p'"
+	puts ""
+	puts "WARNING: Gnuplot must be installed and added to system PATH in order"
+	puts "\tto plot results. You can disable plotting by removing '-p' flag."
 else
 	puts ""
 	puts "---------------------------------------------------"

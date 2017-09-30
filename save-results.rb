@@ -3,13 +3,13 @@ require 'gnuplot'
 
 $txt_filename = "results.txt"
 
-def showResults(sequence, visualization)
+def showResults(sequence, plotting)
 
 	print "Opening Results file...".ljust(JUSTIFICATIONROWS)
 	system %{cmd /c "start #{$txt_filename}"}
 	puts "Done!"
 
-	if visualization == true then 
+	if plotting == true then 
 		print "Plotting Results...".ljust(JUSTIFICATIONROWS)
 
 			Gnuplot.open do |gp|
